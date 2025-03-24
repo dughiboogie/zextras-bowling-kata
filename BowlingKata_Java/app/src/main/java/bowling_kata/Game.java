@@ -2,26 +2,51 @@ package bowling_kata;
 
 public class Game {
 
-    private int rolls[] = new int[20];
+    private int rolls[] = new int[21];
     private int currentRoll = 0;
     private int score = 0;
+
+    private boolean isStrike(int rollIndex) {
+        return rolls[rollIndex] == 10;
+    }
+
+    private boolean isSpare(int rollIndex) {
+        return rolls[rollIndex] + rolls[rollIndex + 1] == 10;
+    }
+
+    private int strikeBonus(int rollIndex) {
+        return rolls[rollIndex + 1] + rolls[rollIndex + 2];
+    }
+
+    private int spareBonus(int rollIndex) {
+        return rolls[rollIndex + 2];
+    }
+
+    private int normalFrameScore(int rollIndex) {
+        return rolls[rollIndex] + rolls[rollIndex + 1];
+    }
 
     public void roll(int pins) {
         rolls[currentRoll++] = pins;
     }
 
     public int score() {
-        // Iterate 2 rolls at a time to keep track of spares and strikes
-        for (int i = 0; i < rolls.length; i = i + 2) {
+        int rollIndex = 0;
 
-            score += rolls[i] + rolls[i + 1];
-
-            // Spare case
-            if ((rolls[i] + rolls[i + 1]) == 10) {
-                score += rolls[i + 2];
+        for (int frame = 0; frame < 10; frame++) { // Iterate over frames
+            if (isStrike(rollIndex)) {
+                score += 10 + strikeBonus(rollIndex);
+                rollIndex++;
+            }
+            else if (isSpare(rollIndex)) {
+                score += 10 + spareBonus(rollIndex);
+                rollIndex += 2;
+            }
+            else {
+                score += normalFrameScore(rollIndex);
+                rollIndex += 2;
             }
         }
-
         return score;
     }
 

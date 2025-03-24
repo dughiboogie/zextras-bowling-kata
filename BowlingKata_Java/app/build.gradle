@@ -34,7 +34,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'bowlingkata_java.App'
+    mainClass = 'bowling_kata.Game'
 }
 
 tasks.named('test') {
